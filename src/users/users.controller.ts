@@ -3,29 +3,26 @@ import {
   Get,
   Post,
   Body,
-  Patch,
-  Param,
-  Delete,
   UseGuards,
+  Injectable,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
 import {
   ApiBearerAuth,
   ApiBody,
-  ApiCreatedResponse,
   ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { UserEntity } from './entity/user.entity';
 
+@Injectable()
 @Controller('users')
 @ApiTags('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
-
+  
   @Post()
   @ApiBody({ type: CreateUserDto })
   create(@Body() createUserDto: CreateUserDto) {

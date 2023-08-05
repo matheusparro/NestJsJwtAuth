@@ -1,14 +1,23 @@
 // user.service.ts
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpServer, ConflictException, HttpException, HttpStatus } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserEntity } from './entity/user.entity';
+import { HttpExceptionFilter } from 'src/error/http-exception.filter';
 
 @Injectable()
 export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(createUserDto: CreateUserDto) {
+
+    const userFound = await this.prisma.user.findFirst({
+      where:{
+        email: createUserDto.email
+      }
+    })
+    if(userFound) throw  new HttpException("This email alredy used",HttpStatus.BAD_REQUEST)
+
     const createUser = new CreateUserDto();
     Object.assign(createUser, createUserDto);
     const userEntity = createUser.toUser();
@@ -21,7 +30,6 @@ export class UsersService {
     // Em seguida, você pode salvar a instância do UserEntity no banco de dados
     const user = await this.prisma.user.create({
       data: userEntity,
-      select: { name: true, email: true },
     });
 
     return user;

@@ -1,3 +1,4 @@
+import { Exclude } from '@nestjs/class-transformer';
 import type { User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 
@@ -7,6 +8,8 @@ export class UserEntity implements User {
   id: number;
   name: string;
   email: string;
+  
+  @Exclude()
   password: string;
 
   constructor(props: UserEntityProps) {
