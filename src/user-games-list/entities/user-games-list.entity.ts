@@ -1,9 +1,9 @@
-import type { UserGameList as UserGameListEntity  } from '@prisma/client';
+import type { UserGameList } from '@prisma/client';
 
-export class UserGamesList implements UserGameListEntity {
+export class UserGamesList implements UserGameList {
  
 
-  constructor(props: UserGameListEntity) {
+  constructor(props: UserGameList) {
     Object.assign(this, props);
   }
     userId: number;
